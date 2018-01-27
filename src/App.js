@@ -54,7 +54,7 @@ class App extends Component {
   render() {
     
     let green = 'green'
-    let headStyle = {color: green, 'font-size':'50px'}
+    let headStyle = {color: green, 'font-size':'60px'}
     return (
       <div className="App">
         <h1 style={headStyle}>Title</h1>
