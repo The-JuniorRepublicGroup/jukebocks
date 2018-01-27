@@ -4,14 +4,121 @@ import './App.css';
 
 let defaultTextColor = "#fff"
 let defaultStyle = {
-  color: defaultTextColor
+  color: defaultTextColor,
+};
+
+const fakeServerData = {
+  user: {
+    name: 'Junior',
+    playlists: [
+      {
+        name: 'Shop List',
+        songs: [
+          {
+            name: 'Beat it',
+            artist: 'Michael Jackson',
+            duration: 12345,
+          },
+          {
+            name: 'Canneloni Makroni',
+            artist: 'Somebody',
+            duration: 14344,
+          },
+          {
+            name: 'Rose helicopter',
+            artist: 'Somebody White',
+            duration: 23545,
+          }
+        ],
+      },
+
+      {
+        name: 'Shop List',
+        songs: [
+          {
+            name: 'Beat it',
+            artist: 'Michael Jackson',
+            duration: 12345,
+          },
+          {
+            name: 'Canneloni Makroni',
+            artist: 'Somebody',
+            duration: 14344,
+          },
+          {
+            name: 'Rose helicopter',
+            artist: 'Somebody White',
+            duration: 23545,
+          }
+        ],
+      },
+      {
+        name: 'Shop List',
+        songs: [
+          {
+            name: 'Beat it',
+            artist: 'Michael Jackson',
+            duration: 12345,
+          },
+          {
+            name: 'Canneloni Makroni',
+            artist: 'Somebody',
+            duration: 14344,
+          },
+          {
+            name: 'Rose helicopter',
+            artist: 'Somebody White',
+            duration: 23545,
+          }
+        ],
+      },
+      {
+        name: 'Shop List',
+        songs: [
+          {
+            name: 'Beat it',
+            artist: 'Michael Jackson',
+            duration: 12345,
+          },
+          {
+            name: 'Canneloni Makroni',
+            artist: 'Somebody',
+            duration: 14344,
+          },
+          {
+            name: 'Rose helicopter',
+            artist: 'Somebody White',
+            duration: 23545,
+          }
+        ],
+      },
+    ],
+  },
 };
 
 class Aggregate extends Component {
   render(){
     return (
     <div style={{...defaultStyle, width: '40%', display: 'inline-block'}} className="aggregate">
-      <h2 >Number Text</h2>
+      <h2 >{this.props.playlists && this.props.playlists.length} Songs Coming Up</h2>
+    </div>
+    );
+  }
+}
+
+class HoursCounter extends Component {
+  render(){
+
+    let allSongs = this.props.playlists.reduce((songs, eachPlaylist) => {
+      return songs.concat(eachPlaylist.songs)
+    } , [])
+    let totalDuration = allSongs.reduce((sum, eachSong) => {
+      return sum + eachSong.duration
+    }, 0);
+
+    return (
+    <div style={{...defaultStyle, width: '40%', display: 'inline-block'}} className="aggregate">
+      <h2 >{Math.round(totalDuration/60)} Hours</h2>
     </div>
     );
   }
@@ -47,24 +154,44 @@ class Playlist extends Component {
 }
 
 
-
-
-
 class App extends Component {
+
+  constructor(){
+    super();
+    this.state = {serverData: {}}
+  }
+
+  componentDidMount(){
+    setTimeout(() => {
+      this.setState({serverData: fakeServerData});      
+    }, 1000);
+  }
+
   render() {
     
     let green = 'green'
     let headStyle = {color: green, 'font-size':'60px'}
     return (
       <div className="App">
-        <h1 style={headStyle}>Title</h1>
-        <Aggregate/>
-        <Aggregate/>
-        <Filter/>
-        <Playlist/>
-        <Playlist/>
-        <Playlist/>
-        <Playlist/>
+        {this.state.serverData.user ?
+            <div>
+            <h1 style={headStyle}>
+              {this.state.serverData.user.name}'s Playlist
+            </h1>
+          }
+          
+              <Aggregate playlists={
+                  this.state.serverData.user.playlists}/>
+              <HoursCounter playlists={
+                  this.state.serverData.user.playlists}/>
+            
+          <Filter/>
+          <Playlist/>
+          <Playlist/>
+          <Playlist/>
+          <Playlist/>
+        </div> : <h1 style={defaultStyle} >Loading...</h1>
+        }
       </div>
     );
   }
